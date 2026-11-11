@@ -1,0 +1,87 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load Titanic Dataset
+url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+df = pd.read_csv(url)
+
+# 1. Dataset Overview
+print("DATASET OVERVIEW")
+print(df.head())
+
+print("\nDataset Shape:")
+print(df.shape)
+
+print("\nDataset Information:")
+df.info()
+
+# 2. Statistical Summary
+print("\nSTATISTICAL SUMMARY")
+print(df.describe())
+
+# 3. Missing Values
+print("\nMISSING VALUES")
+print(df.isnull().sum())
+
+# 4. Value Counts
+print("\nSURVIVAL COUNT")
+print(df["Survived"].value_counts())
+
+# 5. Data Cleaning
+df["Age"] = df["Age"].fillna(df["Age"].median())
+df["Embarked"] = df["Embarked"].fillna(
+    df["Embarked"].mode()[0]
+)
+
+# 6. Age Distribution
+plt.figure(figsize=(7, 4))
+sns.histplot(df["Age"], kde=True)
+plt.title("Age Distribution")
+plt.xlabel("Age")
+plt.show()
+
+# 7. Age Boxplot
+plt.figure(figsize=(7, 4))
+sns.boxplot(x=df["Age"])
+plt.title("Age Boxplot")
+plt.show()
+
+# 8. Survival Count
+plt.figure(figsize=(7, 4))
+sns.countplot(x="Survived", data=df)
+plt.title("Survival Count")
+plt.show()
+
+# 9. Gender vs Survival
+plt.figure(figsize=(7, 4))
+sns.countplot(x="Sex", hue="Survived", data=df)
+plt.title("Gender vs Survival")
+plt.show()
+
+# 10. Correlation Heatmap
+plt.figure(figsize=(8, 5))
+sns.heatmap(
+    df.corr(numeric_only=True),
+    annot=True,
+    cmap="coolwarm"
+)
+plt.title("Correlation Heatmap")
+plt.show()
+
+# 11. Pairplot
+sns.pairplot(
+    df[["Age", "Fare", "Pclass", "Survived"]],
+    hue="Survived"
+)
+plt.show()
+
+# 12. Final Summary
+print("\nEDA SUMMARY")
+print("1. Dataset contains 891 passenger records.")
+print("2. Survival count is 342.")
+print("3. Non-survivors count is 549.")
+print("4. Age and Fare have different distributions.")
+print("5. Gender and passenger class are related to survival.")
+
+print("\nEDA COMPLETED SUCCESSFULLY!")
